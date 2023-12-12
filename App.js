@@ -12,17 +12,6 @@ export default function App() {
       <Header />
       <SearchBar handleChange={setSearch} />
       <ContactList search={search} />
-      {/* <View
-        style={{
-          gap: 10,
-        }}
-      >
-        <Contact contact={{ title: "Kanan" }} />
-        <Contact contact={{ title: "Ana" }} />
-        <Contact contact={{ title: "Natiq" }} />
-        <Contact contact={{ title: "Ceyhun" }} />
-        <Contact contact={{ title: "Xalid" }} />
-      </View> */}
       <StatusBar style="dark" />
     </View>
   );
