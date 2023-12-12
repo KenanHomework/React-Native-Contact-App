@@ -1,11 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View, StatusBar } from "react-native";
+import Header from "./components/Header";
+import ContactList from "./components/ContactList";
+import SearchBar from "./components/SearchBar";
+import { useState } from "react";
 
 export default function App() {
+  const [search, setSearch] = useState("");
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Header />
+      <SearchBar handleChange={setSearch} />
+      <ContactList search={search} />
+      {/* <View
+        style={{
+          gap: 10,
+        }}
+      >
+        <Contact contact={{ title: "Kanan" }} />
+        <Contact contact={{ title: "Ana" }} />
+        <Contact contact={{ title: "Natiq" }} />
+        <Contact contact={{ title: "Ceyhun" }} />
+        <Contact contact={{ title: "Xalid" }} />
+      </View> */}
+      <StatusBar style="dark" />
     </View>
   );
 }
@@ -13,8 +31,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#000",
+    color: "#fff",
+    padding: 20,
+    gap: 10,
   },
 });
