@@ -1,15 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import SearchBar from "./SearchBar";
 import Contacts from "../contacts.json";
 
-export default function Header() {
+export default function Header({ showStat = true }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Phone</Text>
-      <Text style={styles.describe}>
-        {Contacts.length} contacts with phone numbers
-      </Text>
+      {showStat && (
+        <Text style={styles.describe}>
+          {Contacts.length} contacts with phone numbers
+        </Text>
+      )}
     </View>
   );
 }

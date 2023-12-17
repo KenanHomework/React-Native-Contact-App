@@ -2,8 +2,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState, memo } from "react";
 import Avatar from "./Avatar";
 import ContactDescription from "./ContactDescription";
+import CallStatus from "./CallStatus";
 
-export default Contact = memo(({ contact, index, lastIndex }) => {
+export default Contact = memo(({ contact, index, lastIndex, mode }) => {
   const [isOpen, setIsOpen] = useState();
 
   const changeState = () => setIsOpen((prev) => !prev);
@@ -34,23 +35,40 @@ export default Contact = memo(({ contact, index, lastIndex }) => {
       onPress={changeState}
     >
       <View style={styles.titleContainer}>
-        <Avatar title={contact.name} />
-        <View style={{ width: "100%" }}>
+        {mode === "contacts" ? (
+          <Avatar title={contact.name} />
+        ) : (
+          <CallStatus status={contact.status} />
+        )}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            width: "100%",
+            height: 30,
+          }}
+        >
           <Text style={styles.title}>{contact.name}</Text>
+          {!isOpen && showSeparator && (
+            <View
+              style={{
+                width: "80%",
+                height: 1,
+                backgroundColor: "#262626",
+                // marginHorizontal: -20,
+                // marginLeft: mode == "contacts" ? 55 : 40,
+              }}
+            />
+          )}
         </View>
       </View>
       {isOpen && (
-        <ContactDescription contact={contact} showSeparator={showSeparator} />
-      )}
-      {!isOpen && showSeparator && (
-        <View
-          style={{
-            width: "80%",
-            height: 1,
-            backgroundColor: "#262626",
-            //   marginHorizontal: -20,
-            marginLeft: 55,
-          }}
+        <ContactDescription
+          contact={contact}
+          mode={mode}
+          showSeparator={showSeparator}
         />
       )}
     </TouchableOpacity>
@@ -75,6 +93,8 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   title: {
+    marginTop: 3,
+    // marginBottom: 10,
     color: "#fff",
     fontSize: 15,
     fontWeight: "500",

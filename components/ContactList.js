@@ -1,18 +1,24 @@
 import { StyleSheet, Text, View, SectionList } from "react-native";
 import React, { useEffect, useState, useMemo } from "react";
 import ContactsData from "../contacts.json";
+import CallHistory from "../callHistory.json";
 import Contact from "./Contact";
 import EmptyList from "./EmptyList";
 
-export default function ContactList({ search }) {
+export default function ContactList({ search, mode = "contacts" }) {
   const [contacts, setContacts] = useState([]);
 
   function groupAndSortContactsAlphabetically(contacts) {
-    console.log("groupAndSortContactsAlphabetically");
+    const filteredContacts =
+      search && search.length > 0
+        ? contacts.filter((contact) =>
+            contact.name.toUpperCase().includes(search.toUpperCase())
+          )
+        : contacts;
 
     const groupedContacts = {};
 
-    contacts.forEach((contact) => {
+    filteredContacts.forEach((contact) => {
       const firstLetter = contact.name.charAt(0).toUpperCase();
 
       if (!groupedContacts[firstLetter]) {
@@ -37,11 +43,7 @@ export default function ContactList({ search }) {
   const memoizedContacts = useMemo(
     () =>
       groupAndSortContactsAlphabetically(
-        search && search.length > 0
-          ? ContactsData.filter((contact) =>
-              contact.name.toUpperCase().includes(search.toUpperCase())
-            )
-          : ContactsData
+        mode === "contacts" ? ContactsData : CallHistory
       ),
     [search]
   );
@@ -50,19 +52,18 @@ export default function ContactList({ search }) {
     setContacts(memoizedContacts);
   }, [memoizedContacts]);
 
-  console.log("ContactList: ", contacts.length);
-
   return (
     <SectionList
       stickySectionHeadersEnabled={true}
       sections={contacts}
       extraData={contacts}
       keyExtractor={(item) => item.id}
-      renderItem={({ item, section }) => (
+      renderItem={({ item, index, section }) => (
         <Contact
           contact={item}
-          index={section.data.findIndex((i) => i.id == item.id)}
+          index={index}
           lastIndex={section.data.length - 1}
+          mode={mode}
         />
       )}
       renderSectionHeader={({ section: { title } }) => (

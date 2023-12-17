@@ -4,7 +4,24 @@ import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 
-export default function ContactDescription({ contact, showSeparator }) {
+export default function ContactDescription({ contact, showSeparator, mode }) {
+  const callTitle = new Map([
+    ["incoming", "Incoming"],
+    ["outgoing", "Outgoing"],
+    ["rejected", "Declined"],
+    ["missed", "Missed"],
+  ]);
+
+  function formatTime(time) {
+    if (["missed", "rejected"].includes(contact.status)) return "";
+
+    const minute = Math.floor(time / 60);
+
+    const backSeconds = time % 60;
+
+    return `${minute} minute ${backSeconds} sec`;
+  }
+
   return (
     <View style={{ width: "100%" }}>
       <View style={styles.container}>
@@ -12,6 +29,14 @@ export default function ContactDescription({ contact, showSeparator }) {
           <Text style={styles.title}>Number</Text>
           <Text style={styles.phone}>{contact.number}</Text>
         </View>
+        {mode === "recent" && (
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>
+              {callTitle.get(contact.status)} Call
+            </Text>
+            <Text style={styles.phone}>{formatTime(contact.time)}</Text>
+          </View>
+        )}
         <View style={styles.iconContainer}>
           <FontAwesome
             name="phone"

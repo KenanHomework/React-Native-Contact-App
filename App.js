@@ -1,39 +1,43 @@
-import { StyleSheet, View, StatusBar } from "react-native";
-import Header from "./components/Header";
-import ContactList from "./components/ContactList";
-import SearchBar from "./components/SearchBar";
-import { useState } from "react";
+import { StyleSheet, StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import Contacts from "./screens/Contacts";
+import Recents from "./screens/Recents";
+import Keyboard from "./screens/Keyboard";
+import TabBar from "./components/TabBar";
+import Search from "./screens/Search";
 
-export default function App() {
-  const [search, setSearch] = useState("");
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
+function TabNav() {
   return (
-    <View style={styles.container}>
-      <Header />
-      <SearchBar handleChange={setSearch} />
-      <ContactList search={search} />
-      {/* <View
-        style={{
-          gap: 10,
-        }}
-      >
-        <Contact contact={{ title: "Kanan" }} />
-        <Contact contact={{ title: "Ana" }} />
-        <Contact contact={{ title: "Natiq" }} />
-        <Contact contact={{ title: "Ceyhun" }} />
-        <Contact contact={{ title: "Xalid" }} />
-      </View> */}
-      <StatusBar style="dark" />
-    </View>
+    <Tab.Navigator
+      initialRouteName="Contacts"
+      tabBar={(props) => <TabBar {...props} />}
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Tab.Screen name="Keyboard" component={Keyboard} />
+      <Tab.Screen name="Recents" component={Recents} />
+      <Tab.Screen name="Contacts" component={Contacts} />
+    </Tab.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "#fff",
-    padding: 20,
-    gap: 10,
-  },
-});
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Tab_Nav"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="Tab_Nav" component={TabNav} />
+        <Stack.Screen name="Search" component={Search} />
+      </Stack.Navigator>
+      <StatusBar style="dark" />
+    </NavigationContainer>
+  );
+}
